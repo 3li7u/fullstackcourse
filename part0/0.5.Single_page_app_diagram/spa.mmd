@@ -22,7 +22,7 @@
 
   Browser ->> Server: GET: https://studies.cs.helsinki.fi/exampleapp/data.json
   activate Server
-  Server -->> Browser: JSON Data
+  Server -->> Browser: JSON Data: [{ "content": "some note", "date": "2023-6-25" }, ... ]
   deactivate Server
 
   Note right of Browser: The browser will continus executing the JS code that renders the fetched noted on the page
