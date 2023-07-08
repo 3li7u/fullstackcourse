@@ -4,6 +4,7 @@ export default function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const all = good + neutral + bad;
   return (
     <>
       <h1>Give Feedback</h1>
@@ -11,9 +12,12 @@ export default function App() {
       <Button text="Neutral" handleClick={() => setNeutral((prev) => ++prev)} />
       <Button text="Bad" handleClick={() => setBad((prev) => ++prev)} />
       <h1>Statistics</h1>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
+      <p>Good: {good}</p>
+      <p>Neutral: {neutral}</p>
+      <p>Bad: {bad}</p>
+      <p>All: {all}</p>
+      <p>Average: {all > 0 && (good - bad) / all}</p>
+      <p>Positive: {all > 0 && (good / all) * 100}</p>
     </>
   );
 }
