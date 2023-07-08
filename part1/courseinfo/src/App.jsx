@@ -1,27 +1,29 @@
 export default function App() {
-  const course = "Half Stack application development";
-  const parts = [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
-  ];
-  const { exercises } = parts.reduce((prev, curr) => ({
+  const course = {
+    name: "Half Stack application development",
+    parts: [
+      {
+        name: "Fundamentals of React",
+        exercises: 10,
+      },
+      {
+        name: "Using props to pass data",
+        exercises: 7,
+      },
+      {
+        name: "State of a component",
+        exercises: 14,
+      },
+    ],
+  };
+  const { exercises } = course.parts.reduce((prev, curr) => ({
     name: curr.name,
     exercises: curr.exercises + prev.exercises,
   }));
   return (
     <div>
-      <Header course={course} />
-      <Content parts={parts} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
       <Footer total={exercises} />
     </div>
   );
