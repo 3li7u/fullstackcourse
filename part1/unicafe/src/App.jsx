@@ -20,15 +20,17 @@ function Button({ text, handleClick }) {
 
 function Statistics({ good, neutral, bad }) {
   const all = good + neutral + bad;
-  return (
+  return all > 0 ? (
     <>
       <h1>Statistics</h1>
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
       <p>All: {all}</p>
-      <p>Average: {all > 0 && (good - bad) / all}</p>
-      <p>Positive: {all > 0 && (good / all) * 100}</p>
+      <p>Average: {(good - bad) / all}</p>
+      <p>Positive: {(good / all) * 100}</p>
     </>
+  ) : (
+    <p>No Feedback Given</p>
   );
 }
