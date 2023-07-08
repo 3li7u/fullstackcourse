@@ -11,12 +11,22 @@ export default function App() {
     "Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.",
     "The only way to go fast, is to go well.",
   ];
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
   const [selected, setSelected] = useState(0);
+
   const handleSelect = () =>
     setSelected(Math.round(Math.random() * (anecdotes.length - 1)));
+  const handleVote = () =>
+    setVotes((prev) => {
+      const newVotes = [...prev];
+      newVotes[selected] += 1;
+      return newVotes;
+    });
   return (
     <>
       <p>{anecdotes[selected]}</p>
+      <p>Has: {votes[selected]} votes.</p>
+      <button onClick={handleVote}>Vote</button>
       <button onClick={handleSelect}>Next Anecdote</button>
     </>
   );
