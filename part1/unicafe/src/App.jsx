@@ -23,14 +23,22 @@ function Statistics({ good, neutral, bad }) {
   return all > 0 ? (
     <>
       <h1>Statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {all}</p>
-      <p>Average: {(good - bad) / all}</p>
-      <p>Positive: {(good / all) * 100}</p>
+      <StatisticLine text="Good" value={good} />
+      <StatisticLine text="Neutral" value={neutral} />
+      <StatisticLine text="Bad" value={bad} />
+      <StatisticLine text="All" value={all} />
+      <StatisticLine text="Average" value={(good - bad) / all} />
+      <StatisticLine text="Positive" value={(good / all) * 100} />
     </>
   ) : (
     <p>No Feedback Given</p>
+  );
+}
+
+function StatisticLine({ text, value }) {
+  return (
+    <p>
+      {text}: {value}
+    </p>
   );
 }
