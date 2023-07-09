@@ -2,15 +2,20 @@ import { useState } from "react";
 
 export default function App() {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
+  const [newPerson, setNewPerson] = useState({ name: "", number: "" });
 
-  const handleNameChange = (event) => setNewName(event.target.value);
+  const handlePersonChange = (event) =>
+    setNewPerson((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    persons.find((person) => person.name === newName)
-      ? alert(`${newName} is already exist!`)
-      : (setPersons((prev) => [...prev, { name: newName }]), setNewName(""));
+    persons.find((person) => person.name === newPerson.name)
+      ? alert(`${newPerson.name} is already exist!`)
+      : (setPersons((prev) => [...prev, newPerson]),
+        setNewPerson({ name: "", number: "" }));
   };
   return (
     <>
@@ -18,20 +23,39 @@ export default function App() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={newName}
-          onChange={handleNameChange}
+          name="name"
+          value={newPerson.name}
+          onChange={handlePersonChange}
           placeholder="Type a name.."
+        />
+        <input
+          type="number"
+          name="number"
+          value={newPerson.number}
+          onChange={handlePersonChange}
+          placeholder="Type a number.."
         />
         <input type="submit" value="Add" />
       </form>
       <h2>Numbers</h2>
-      <ul>
-        {persons.length > 0 ? (
-          persons.map(({ name }) => <li key={name}>{name}</li>)
-        ) : (
-          <li>There is no numbers yet! Add one</li>
-        )}
-      </ul>
+      {persons.length > 0 ? (
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Number</th>
+            </tr>
+            {persons.map(({ name, number }) => (
+              <tr key={name}>
+                <td>{name}</td>
+                <td>{number}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <h4>There is no numbers yet! Add one</h4>
+      )}
     </>
   );
 }
