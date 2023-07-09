@@ -1,5 +1,5 @@
 import Content from "../content";
-import Footer from "../footer/footer";
+import Footer from "../footer";
 import Header from "../header";
 
 export default function Course({ course }) {
