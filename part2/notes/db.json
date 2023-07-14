@@ -1,18 +1,113 @@
 {
   "notes": [
     {
-      "id": 1,
-      "content": "HTML is easy",
-      "important": true
-    },
-    {
-      "id": 2,
-      "content": "Browser can execute only JavaScript",
+      "id": "1a773e94-443f-4717-a3c2-ae405658200c",
+      "content": "hi",
       "important": false
     },
     {
-      "id": 3,
-      "content": "GET and POST are the most important methods of HTTP protocol",
+      "id": "fa54c823-7251-4543-a3e3-87b4c22d3b82",
+      "content": "hello",
+      "important": false
+    },
+    {
+      "id": "789d7475-155a-4b1b-b034-fb666a2328ab",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "80b11284-25a6-4e1a-ae29-ee56881cb2e9",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "a6cb98f1-7671-4a28-a272-8ed7414808d7",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "d628275b-0525-41b7-8b33-7bcc612401c1",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "f1b63d88-579b-441d-9ee6-66c76176f22e",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "487b5bcd-5e15-4b3d-9675-6cdbfa351ce5",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "3cbcfcaa-210f-4101-8d24-803d96dc021c",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "c0b1470a-a27c-4a47-895d-5251312b340b",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "9e41ea8a-1c18-4b22-94d5-a0b86c4697f5",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "e2da2bfc-f6a8-4bb8-b190-883f01155c05",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "f7fdb8d8-7522-4e3e-9a68-e67f47cb389c",
+      "content": "wow",
+      "important": true
+    },
+    {
+      "id": "92c4bdba-923c-43db-9c9d-0d00c47939f2",
+      "content": "wowo",
+      "important": false
+    },
+    {
+      "id": "d0b58701-e355-4dbb-a2e0-9293acc202a7",
+      "content": "wowo",
+      "important": true
+    },
+    {
+      "id": "6f8343f2-da08-4051-af92-54401dcd7c74",
+      "content": "<script>alert(\"hello there\")</script>",
+      "important": false
+    },
+    {
+      "id": "73e2d54e-9d5f-4e7c-bafd-0a56b61906ff",
+      "content": "alert()",
+      "important": true
+    },
+    {
+      "id": "86981d47-7ae4-4384-aae8-832177661038",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "7c8740f5-1ebb-4a78-bc70-532e6cc2fb57",
+      "content": "hi",
+      "important": true
+    },
+    {
+      "id": "087e0cba-af2d-487f-a798-b383a1ac6ec9",
+      "content": "woow",
+      "important": false
+    },
+    {
+      "id": "4c89816d-ba1f-46ad-bf34-31ed01337bab",
+      "content": "hi",
+      "important": false
+    },
+    {
+      "id": "07167e31-4a46-477b-8ce2-807b72c7117d",
+      "content": "wowo",
       "important": true
     }
   ]
