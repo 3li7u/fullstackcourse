@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
+import personesService from "../../services/persones.service";
 
 export default function AddPerson({ persons, setPersons }) {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
@@ -15,13 +15,13 @@ export default function AddPerson({ persons, setPersons }) {
     if (persons.find((person) => person.name === newPerson.name))
       alert(`${newPerson.name} is already exist!`);
     else {
-      axios
-        .post("http://localhost:3000/persones", {
+      personesService
+        .create({
           ...newPerson,
           id: crypto.randomUUID(),
         })
-        .then((res) => {
-          setPersons((prev) => [...prev, res.data]);
+        .then((person) => {
+          setPersons((prev) => [...prev, person]);
           setNewPerson({ name: "", number: "" });
         })
         .catch((err) => console.log(err.message));
