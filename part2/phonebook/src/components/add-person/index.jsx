@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 export default function AddPerson({ persons, setPersons }) {
@@ -11,10 +12,20 @@ export default function AddPerson({ persons, setPersons }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    persons.find((person) => person.name === newPerson.name)
-      ? alert(`${newPerson.name} is already exist!`)
-      : (setPersons((prev) => [...prev, newPerson]),
-        setNewPerson({ name: "", number: "" }));
+    if (persons.find((person) => person.name === newPerson.name))
+      alert(`${newPerson.name} is already exist!`);
+    else {
+      axios
+        .post("http://localhost:3000/persones", {
+          ...newPerson,
+          id: crypto.randomUUID(),
+        })
+        .then((res) => {
+          setPersons((prev) => [...prev, res.data]);
+          setNewPerson({ name: "", number: "" });
+        })
+        .catch((err) => console.log(err.message));
+    }
   };
   return (
     <form onSubmit={handleSubmit}>
