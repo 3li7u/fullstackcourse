@@ -10,4 +10,7 @@ const create = (persone) =>
 const remove = (personID) =>
   personsAPI.delete(`/${personID}`).then((res) => res.data);
 
-export default { getAll, create, remove };
+const update = (personID, newPerson) =>
+  personsAPI.put(`/${personID}`, newPerson).then((res) => res.data);
+
+export default { getAll, create, remove, update };

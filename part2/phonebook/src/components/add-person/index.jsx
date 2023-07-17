@@ -12,9 +12,27 @@ export default function AddPerson({ persons, setPersons }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (persons.find((person) => person.name === newPerson.name))
-      alert(`${newPerson.name} is already exist!`);
-    else {
+    const existingPerson = persons.find(
+      (person) => person.name === newPerson.name
+    );
+    if (existingPerson) {
+      if (
+        confirm(
+          `${existingPerson.name} is already exist! Do you want to update the number?`
+        )
+      )
+        personesService
+          .update(existingPerson.id, { ...newPerson, id: existingPerson.id })
+          .then((updatedPerson) => {
+            setPersons((prev) =>
+              prev.map((person) =>
+                person.id === existingPerson.id ? updatedPerson : person
+              )
+            );
+            setNewPerson({ name: "", number: "" });
+          })
+          .catch((err) => console.log(err.message));
+    } else {
       personesService
         .create({
           ...newPerson,
