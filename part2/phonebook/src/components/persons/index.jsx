@@ -3,9 +3,14 @@ import Person from "./person";
 
 export default function Persons({ persons, setPersons }) {
   const handlePersonDeletion = (personID) => {
-    personesService.remove(personID).then(() => {
-      setPersons((prev) => prev.filter((person) => person.id !== personID));
-    });
+    const person = persons.find((person) => person.id === personID);
+    if (confirm(`Are you sure you want to delete ${person.name}`))
+      personesService
+        .remove(personID)
+        .then(() => {
+          setPersons((prev) => prev.filter((person) => person.id !== personID));
+        })
+        .catch((err) => console.log(err.message));
   };
 
   return persons.length > 0 ? (
