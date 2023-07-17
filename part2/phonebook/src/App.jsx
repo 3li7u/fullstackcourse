@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AddPerson from "./components/add-person";
 import Filter from "./components/filter";
 import Persons from "./components/persons";
-import personesService from "./services/persones.service";
+import personesService from "./services/persons.service";
 
 export default function App() {
   const [persons, setPersons] = useState([]);
@@ -24,7 +24,7 @@ export default function App() {
       <AddPerson persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
       <Filter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <Persons persons={filteredPersones} />
+      <Persons persons={filteredPersones} setPersons={setPersons} />
     </>
   );
 }

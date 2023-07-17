@@ -1,5 +1,5 @@
 import { useState } from "react";
-import personesService from "../../services/persones.service";
+import personesService from "../../services/persons.service";
 
 export default function AddPerson({ persons, setPersons }) {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });

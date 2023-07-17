@@ -1,24 +1,3 @@
 {
-  "persones": [
-    {
-      "name": "hi",
-      "number": "",
-      "id": "b6031653-59e1-43e3-af0f-3026a45c1362"
-    },
-    {
-      "name": "hello",
-      "number": "",
-      "id": "bd370264-a9d3-43fe-bd08-0075eab1e6c3"
-    },
-    {
-      "name": "homa",
-      "number": "",
-      "id": "642e745f-2844-4129-a965-9e51f7613214"
-    },
-    {
-      "name": "hii",
-      "number": "",
-      "id": "35c06af9-5ad1-4453-a576-22a225e2c364"
-    }
-  ]
+  "persons": []
 }
