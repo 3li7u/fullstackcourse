@@ -1,8 +1,10 @@
 import { useState } from "react";
 import personesService from "../../services/persons.service";
+import Notification from "../notification";
 
 export default function AddPerson({ persons, setPersons }) {
   const [newPerson, setNewPerson] = useState({ name: "", number: "" });
+  const [notification, setNotification] = useState(null);
 
   const handlePersonChange = (event) =>
     setNewPerson((prev) => ({
@@ -30,8 +32,19 @@ export default function AddPerson({ persons, setPersons }) {
               )
             );
             setNewPerson({ name: "", number: "" });
+            setNotification({
+              message: `${existingPerson.name} has been updated successfully`,
+              type: "success",
+            });
+            setTimeout(() => setNotification(null), 3000);
           })
-          .catch((err) => console.log(err.message));
+          .catch((err) => {
+            setNotification({
+              message: err.message,
+              type: "fail",
+            });
+            setTimeout(() => setNotification(null), 3000);
+          });
     } else {
       personesService
         .create({
@@ -41,8 +54,20 @@ export default function AddPerson({ persons, setPersons }) {
         .then((person) => {
           setPersons((prev) => [...prev, person]);
           setNewPerson({ name: "", number: "" });
+          setNewPerson({ name: "", number: "" });
+          setNotification({
+            message: `${person.name} has been Added successfully`,
+            type: "success",
+          });
+          setTimeout(() => setNotification(null), 3000);
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => {
+          setNotification({
+            message: err.message,
+            type: "fail",
+          });
+          setTimeout(() => setNotification(null), 3000);
+        });
     }
   };
   return (
@@ -62,6 +87,7 @@ export default function AddPerson({ persons, setPersons }) {
         placeholder="Type a number.."
       />
       <input type="submit" value="Add" />
+      {notification && <Notification {...{ notification }} />}
     </form>
   );
 }
