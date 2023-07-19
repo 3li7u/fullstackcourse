@@ -65,6 +65,7 @@ export default function App() {
   };
   return (
     <>
+      <span>{import.meta.env.MODE}</span>
       <input
         autoFocus
         type="text"

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const countryEndPoint = axios.create({
-  baseURL: "https://studies.cs.helsinki.fi/restcountries/api/",
+  baseURL: import.meta.env.VITE_API_END_POINT,
 });
 
 const getAll = () => countryEndPoint.get("/all").then((res) => res.data);
