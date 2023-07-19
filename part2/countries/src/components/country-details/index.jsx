@@ -1,9 +1,11 @@
 export default function Country({ country }) {
   const { name, capital, area, languages, flags } = country;
   const renderLanguages = () => {
+    const langs = [];
     for (let lang in languages) {
-      return <li key={lang}>{languages[lang]}</li>;
+      langs.push(<li key={lang}>{languages[lang]}</li>);
     }
+    return langs;
   };
   return (
     <div>
