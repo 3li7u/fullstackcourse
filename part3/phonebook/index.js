@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-const data = [
+let data = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -46,6 +46,20 @@ app.get("/api/persones/:id", (req, res) => {
   const person = data.find((person) => person.id == id);
   if (person) res.json(person);
   else res.json({ error: `The requested persone: (${id}) hasn't been found` });
+});
+
+app.delete("/api/persones/:id", (req, res) => {
+  const { id } = req.params;
+  const person = data.find((person) => person.id == id);
+  if (person) {
+    data = data.filter((person) => person.id != id);
+    res.json({
+      message: `The person: (${id}) has been deleted successfully`,
+      person,
+    });
+  } else {
+    res.json({ error: `The requested persone (${id}) hasn't been found` });
+  }
 });
 
 app.listen(PORT, () =>
