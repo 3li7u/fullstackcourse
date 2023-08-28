@@ -24,17 +24,12 @@ export default function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newNoteData = {
-      id: crypto.randomUUID(),
-      content: newNote,
-      important: Math.random() > 0.5,
-    };
     setIsAdding(true);
     noteService
-      .create(newNoteData)
+      .create({ content: newNote })
       .then(
         (note) => (
-          setNotes((prev) => [...prev, note]),
+          setNotes((prev) => [...prev, note.data]),
           setNewNote(""),
           setAddingError(null)
         )
@@ -49,12 +44,12 @@ export default function App() {
     const noteToBeToggled = notes.find(({ id }) => id === noteID);
     noteService
       .update({
-        ...noteToBeToggled,
+        id: noteToBeToggled.id,
         important: !noteToBeToggled.important,
       })
       .then((updatedNote) =>
         setNotes((prev) =>
-          prev.map((note) => (note.id === noteID ? updatedNote : note))
+          prev.map((note) => (note.id === noteID ? updatedNote.data : note))
         )
       )
       .catch((err) => console.log(err.message));
@@ -91,7 +86,7 @@ export default function App() {
           onChange={handleNoteChange}
           placeholder="Type a note.."
         />
-        <input type="submit" value="Save" disabled={isAdding} />
+        <input type="submit" value="Save" disabled={isAdding || !newNote} />
         {addingError && (
           <p style={{ color: "red" }}>
             <i> {addingError.message}</i>
