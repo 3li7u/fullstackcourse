@@ -41,6 +41,13 @@ app.get("/api/persones", (req, res) => {
   res.json(data);
 });
 
+app.get("/api/persones/:id", (req, res) => {
+  const { id } = req.params;
+  const person = data.find((person) => person.id == id);
+  if (person) res.json(person);
+  else res.json({ error: `The requested persone: (${id}) hasn't been found` });
+});
+
 app.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`)
 );
