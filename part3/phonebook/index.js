@@ -1,9 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
 
-const app = express();
-const PORT = 3000;
-
 let data = [
   {
     id: 1,
@@ -27,6 +24,8 @@ let data = [
   },
 ];
 
+const PORT = 3000;
+const app = express();
 app.use(express.json());
 
 app.get("/", (req, res) => {
