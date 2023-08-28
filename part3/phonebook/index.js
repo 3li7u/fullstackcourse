@@ -72,17 +72,22 @@ app.delete("/api/persones/:id", (req, res) => {
 
 app.post("/api/persones", (req, res) => {
   const person = req.body;
-  if (person?.number) {
-    const personeData = {
-      name: person.name || "",
-      number: person.number,
-      id: crypto.randomUUID(),
-    };
-    data.push(personeData);
-    res.json({
-      message: `New Person has been added successfully`,
-      data: personeData,
-    });
+  if (person?.number && person?.name) {
+    const isNameUnique = !data.find((per) => per.name === person.name);
+    if (isNameUnique) {
+      const personeData = {
+        name: person.name,
+        number: person.number,
+        id: crypto.randomUUID(),
+      };
+      data.push(personeData);
+      res.json({
+        message: `New Person has been added successfully`,
+        data: personeData,
+      });
+    } else {
+      res.status(400).json({ error: "Name must be unique" });
+    }
   } else {
     res.status(400).json({ error: "Missing Data" });
   }
