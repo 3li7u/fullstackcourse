@@ -1,5 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
+const morgan = require("morgan");
 
 let data = [
   {
@@ -27,6 +28,7 @@ let data = [
 const PORT = 3000;
 const app = express();
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -91,6 +93,11 @@ app.post("/api/persones", (req, res) => {
     res.status(400).json({ error: "Missing Data" });
   }
 });
+
+const unknownEndPoint = (req, res) =>
+  res.status(404).json({ error: "Unknown End Point" });
+
+app.use(unknownEndPoint);
 
 app.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`)
