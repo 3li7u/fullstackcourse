@@ -1,8 +1,8 @@
 const express = require("express");
 const crypto = require("crypto");
-
-const app = express();
-const PORT = 3000;
+const morgan = require("morgan");
+const cors = require("cors");
+require("dotenv").config();
 
 let notes = [
   {
@@ -22,7 +22,16 @@ let notes = [
   },
 ];
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 app.use(express.json());
+
+morgan.token("body", (req, res) => JSON.stringify(req.body));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -37,14 +46,14 @@ app.get("/api/notes/:id", (req, res) => {
   const note = notes.find((note) => note.id == id);
   if (note)
     res.json({
-      status: true,
+      success: true,
       code: 200,
       message: `The requested note: ${id}, has been fetched successfully`,
       data: note,
     });
   else
     res.status(404).json({
-      status: false,
+      success: false,
       code: 404,
       message: `The requested note: ${id}, hasn't been found`,
       data: note,
@@ -57,14 +66,14 @@ app.delete("/api/notes/:id", (req, res) => {
   if (note) {
     notes = notes.filter((note) => note.id != id);
     res.json({
-      status: true,
+      success: true,
       code: 204,
       message: `The requested note: ${id}, has been deleted successfully`,
       data: note,
     });
   } else {
     res.status(404).json({
-      status: false,
+      success: false,
       code: 404,
       message: `The requested note: ${id}, hasn't been found`,
       data: note,
@@ -82,20 +91,58 @@ app.post("/api/notes", (req, res) => {
     };
     notes.push(noteData);
     res.json({
-      status: true,
+      success: true,
       code: 200,
       message: "New note has been added successfully",
       data: noteData,
     });
   } else {
     res.status(400).json({
-      status: false,
+      success: false,
       code: 400,
       message: `Missing Content`,
       data: note,
     });
   }
 });
+
+app.patch("/api/notes/:id", (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  if (data) {
+    const note = notes.find((note) => note.id == id);
+    if (note) {
+      const newNote = { ...note, ...data };
+      notes = notes.map((note) => (note.id == id ? newNote : note));
+      res.json({
+        success: true,
+        code: 200,
+        message: `The requested note: ${id} has been edited successfully`,
+        data: newNote,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        code: 404,
+        message: `The requested note: ${id} hasn't been found`,
+        data: note,
+      });
+    }
+  } else {
+    res.status(400).json({
+      success: false,
+      code: 400,
+      message: `Missing Content`,
+    });
+  }
+});
+
+const unknownEndPoint = (req, res) =>
+  res.status(404).json({
+    success: false,
+    message: `The requested end point: ${req.url} hasn't been found`,
+  });
+app.use(unknownEndPoint);
 
 app.listen(PORT, () => {
   console.log(`Server is running on: http://localhost:${PORT}`);
