@@ -1,4 +1,5 @@
 const express = require("express");
+const crypto = require("crypto");
 
 const app = express();
 const PORT = 3000;
@@ -26,6 +27,8 @@ let data = [
   },
 ];
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -45,7 +48,10 @@ app.get("/api/persones/:id", (req, res) => {
   const { id } = req.params;
   const person = data.find((person) => person.id == id);
   if (person) res.json(person);
-  else res.json({ error: `The requested persone: (${id}) hasn't been found` });
+  else
+    res
+      .status(404)
+      .json({ error: `The requested persone: (${id}) hasn't been found` });
 });
 
 app.delete("/api/persones/:id", (req, res) => {
@@ -58,7 +64,27 @@ app.delete("/api/persones/:id", (req, res) => {
       person,
     });
   } else {
-    res.json({ error: `The requested persone (${id}) hasn't been found` });
+    res
+      .status(404)
+      .json({ error: `The requested persone (${id}) hasn't been found` });
+  }
+});
+
+app.post("/api/persones", (req, res) => {
+  const person = req.body;
+  if (person?.number) {
+    const personeData = {
+      name: person.name || "",
+      number: person.number,
+      id: crypto.randomUUID(),
+    };
+    data.push(personeData);
+    res.json({
+      message: `New Person has been added successfully`,
+      data: personeData,
+    });
+  } else {
+    res.status(400).json({ error: "Missing Data" });
   }
 });
 
