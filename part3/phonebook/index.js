@@ -28,7 +28,11 @@ let data = [
 const PORT = 3000;
 const app = express();
 app.use(express.json());
-app.use(morgan("tiny"));
+
+morgan.token("body", (req, res) => JSON.stringify(req.body));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -82,7 +86,7 @@ app.post("/api/persones", (req, res) => {
         id: crypto.randomUUID(),
       };
       data.push(personeData);
-      res.json({
+      res.status(201).json({
         message: `New Person has been added successfully`,
         data: personeData,
       });
