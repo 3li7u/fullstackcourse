@@ -1,7 +1,6 @@
 import axios from "axios";
-
 const personsAPI = axios.create({
-  baseURL: "https://phonebook-0i6z.onrender.com/api/persons",
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 const getAll = () => personsAPI.get("/").then((res) => res.data);

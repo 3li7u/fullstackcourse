@@ -15,7 +15,7 @@ export default function App() {
     personesService
       .getAll()
       .then((personesData) => setPersons(personesData.data))
-      .catch((err) => console.log(err.response?.data.message));
+      .catch((err) => console.log(err?.response?.data.message));
   }, []);
 
   return (
