@@ -1,10 +1,10 @@
-export default function Person({ id, name, number, handlePersonDeletion }) {
+export default function Person({ id, name, number, onDelete }) {
   return (
     <tr>
       <td>{name}</td>
       <td>{number}</td>
       <td>
-        <button onClick={() => handlePersonDeletion(id)}>Delete</button>
+        <button onClick={() => onDelete(id)}>Delete</button>
       </td>
     </tr>
   );

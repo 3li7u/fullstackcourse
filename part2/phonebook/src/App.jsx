@@ -14,8 +14,8 @@ export default function App() {
   useEffect(() => {
     personesService
       .getAll()
-      .then((persones) => setPersons(persones))
-      .catch((err) => console.log(err.message));
+      .then((personesData) => setPersons(personesData.data))
+      .catch((err) => console.log(err.response?.data.message));
   }, []);
 
   return (

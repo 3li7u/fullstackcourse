@@ -1,6 +1,7 @@
 const express = require("express");
 const crypto = require("crypto");
 const morgan = require("morgan");
+const cors = require("cors");
 
 let data = [
   {
@@ -28,6 +29,7 @@ let data = [
 const PORT = 3000;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));
 app.use(
@@ -45,37 +47,49 @@ app.get("/info", (req, res) => {
   `);
 });
 
-app.get("/api/persones", (req, res) => {
-  res.json(data);
+app.get("/api/persons", (req, res) => {
+  res.json({
+    success: true,
+    message: `${data.length} people have been fetched successfully`,
+    data,
+  });
 });
 
-app.get("/api/persones/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res) => {
   const { id } = req.params;
   const person = data.find((person) => person.id == id);
-  if (person) res.json(person);
+  if (person)
+    res.json({
+      success: true,
+      message: `Person: ${person.id} has been fetched successfully`,
+      data: person,
+    });
   else
-    res
-      .status(404)
-      .json({ error: `The requested persone: (${id}) hasn't been found` });
+    res.status(404).json({
+      success: false,
+      message: `The requested person: ${id} hasn't been found`,
+    });
 });
 
-app.delete("/api/persones/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res) => {
   const { id } = req.params;
   const person = data.find((person) => person.id == id);
   if (person) {
     data = data.filter((person) => person.id != id);
     res.json({
-      message: `The person: (${id}) has been deleted successfully`,
-      person,
+      success: true,
+      message: `${person.name} has been deleted successfully`,
+      data: person,
     });
   } else {
-    res
-      .status(404)
-      .json({ error: `The requested persone (${id}) hasn't been found` });
+    res.status(404).json({
+      success: false,
+      message: `The requested person ${id} hasn't been found`,
+    });
   }
 });
 
-app.post("/api/persones", (req, res) => {
+app.post("/api/persons", (req, res) => {
   const person = req.body;
   if (person?.number && person?.name) {
     const isNameUnique = !data.find((per) => per.name === person.name);
@@ -87,19 +101,47 @@ app.post("/api/persones", (req, res) => {
       };
       data.push(personeData);
       res.status(201).json({
-        message: `New Person has been added successfully`,
+        success: true,
+        message: `New person: ${personeData.name} has been added successfully`,
         data: personeData,
       });
     } else {
-      res.status(400).json({ error: "Name must be unique" });
+      res.status(400).json({ success: false, message: "Name must be unique" });
     }
   } else {
-    res.status(400).json({ error: "Missing Data" });
+    res.status(400).json({ success: false, message: "Missing data" });
   }
 });
 
+app.put("/api/persons/:id", (req, res) => {
+  const { id } = req.params;
+  const newPerson = req.body;
+  const person = data.find((person) => person.id == id);
+  if (person) {
+    if (newPerson.name && newPerson.number) {
+      data = data.map((person) =>
+        person.id == id ? { ...newPerson, id: person.id } : person
+      );
+      res.json({
+        success: true,
+        message: `${person.name} has been updated successfully`,
+        data: newPerson,
+      });
+    } else {
+      res.status(400).json({ success: false, message: "Missing data" });
+    }
+  } else {
+    res.status(404).json({
+      success: false,
+      message: `The requested person ${id} hasn't been found`,
+    });
+  }
+});
 const unknownEndPoint = (req, res) =>
-  res.status(404).json({ error: "Unknown End Point" });
+  res.status(404).json({
+    success: false,
+    message: `The requested end point: ${req.url} hasn't been found`,
+  });
 
 app.use(unknownEndPoint);
 

@@ -24,46 +24,43 @@ export default function AddPerson({ persons, setPersons }) {
         )
       )
         personesService
-          .update(existingPerson.id, { ...newPerson, id: existingPerson.id })
-          .then((updatedPerson) => {
+          .update(existingPerson.id, newPerson)
+          .then((data) => {
             setPersons((prev) =>
               prev.map((person) =>
-                person.id === existingPerson.id ? updatedPerson : person
+                person.id === existingPerson.id ? data.data : person
               )
             );
             setNewPerson({ name: "", number: "" });
             setNotification({
-              message: `${existingPerson.name} has been updated successfully`,
+              message: data.message,
               type: "success",
             });
             setTimeout(() => setNotification(null), 3000);
           })
           .catch((err) => {
             setNotification({
-              message: err.message,
+              message: err.response?.data.message,
               type: "fail",
             });
             setTimeout(() => setNotification(null), 3000);
           });
     } else {
       personesService
-        .create({
-          ...newPerson,
-          id: crypto.randomUUID(),
-        })
-        .then((person) => {
-          setPersons((prev) => [...prev, person]);
+        .create(newPerson)
+        .then((data) => {
+          setPersons((prev) => [...prev, data.data]);
           setNewPerson({ name: "", number: "" });
           setNewPerson({ name: "", number: "" });
           setNotification({
-            message: `${person.name} has been Added successfully`,
-            type: "success",
+            message: data.message,
+            type: data.success ? "success" : "fail",
           });
           setTimeout(() => setNotification(null), 3000);
         })
         .catch((err) => {
           setNotification({
-            message: err.message,
+            message: err.response?.data.message,
             type: "fail",
           });
           setTimeout(() => setNotification(null), 3000);

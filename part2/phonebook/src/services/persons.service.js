@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const personsAPI = axios.create({ baseURL: "http://localhost:3000/persons" });
+const personsAPI = axios.create({
+  baseURL: "http://localhost:3000/api/persons",
+});
 
 const getAll = () => personsAPI.get("/").then((res) => res.data);
 
