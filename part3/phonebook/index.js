@@ -119,13 +119,12 @@ app.put("/api/persons/:id", (req, res) => {
   const person = data.find((person) => person.id == id);
   if (person) {
     if (newPerson.name && newPerson.number) {
-      data = data.map((person) =>
-        person.id == id ? { ...newPerson, id: person.id } : person
-      );
+      const newPersonData = { ...newPerson, id: person.id };
+      data = data.map((person) => (person.id == id ? newPersonData : person));
       res.json({
         success: true,
         message: `${person.name} has been updated successfully`,
-        data: newPerson,
+        data: newPersonData,
       });
     } else {
       res.status(400).json({ success: false, message: "Missing data" });

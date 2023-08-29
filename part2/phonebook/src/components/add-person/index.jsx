@@ -20,7 +20,7 @@ export default function AddPerson({ persons, setPersons }) {
     if (existingPerson) {
       if (
         confirm(
-          `${existingPerson.name} is already exist! Do you want to update the number?`
+          `${existingPerson.name} is already exist! Do you want to update it?`
         )
       )
         personesService
