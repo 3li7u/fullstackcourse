@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const crypto = require("crypto");
 const morgan = require("morgan");
 const cors = require("cors");
-require("dotenv").config();
+const mongoose = require("mongoose");
 
 let notes = [
   {
@@ -24,6 +25,7 @@ let notes = [
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const URI = process.env.DB_URI;
 
 app.use(cors());
 app.use(express.json());
@@ -33,12 +35,25 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
+mongoose.set("strictQuery", false);
+mongoose.connect(URI);
+const noteSchema = new mongoose.Schema({ content: String, important: Boolean });
+const Note = mongoose.model("Note", noteSchema);
+noteSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.get("/api/notes", (req, res) => {
-  res.json(notes);
+  Note.find().then((notes) => res.status(200).json(notes));
+  mongoose.connection.close();
 });
 
 app.get("/api/notes/:id", (req, res) => {
