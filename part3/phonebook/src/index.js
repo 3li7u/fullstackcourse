@@ -38,7 +38,7 @@ app.get("/info", async (req, res) => {
   }
 });
 
-app.get("/api/people", async (req, res) => {
+app.get("/api/people", async (req, res, next) => {
   try {
     await DBConnect();
     const people = await Person.find();
@@ -51,10 +51,7 @@ app.get("/api/people", async (req, res) => {
       data: { people, total: people.length },
     });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
@@ -151,12 +148,14 @@ app.put("/api/people/:id", async (req, res) => {
     const { id } = req.params;
     const newPerson = req.body;
     if (newPerson.name && newPerson.number) {
-      const person = await Person.findByIdAndUpdate(id, newPerson);
+      const person = await Person.findByIdAndUpdate(id, newPerson, {
+        new: true,
+      });
       if (person) {
         res.json({
           success: true,
           message: `${person.name} has been updated successfully`,
-          data: { ...newPerson, id },
+          data: person,
         });
       } else {
         res.status(404).json({
@@ -176,13 +175,24 @@ app.put("/api/people/:id", async (req, res) => {
     mongoose.connection.close();
   }
 });
+
 const unknownEndPoint = (req, res) =>
   res.status(404).json({
     success: false,
     message: `The requested end point: ${req.url} hasn't been found`,
   });
 
+const errorHandler = (error, req, res, next) => {
+  console.error("MyError: ", error.message);
+  res.json({
+    success: false,
+    message: error.message,
+  });
+  next(error);
+};
+
 app.use(unknownEndPoint);
+app.use(errorHandler);
 
 app.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`)
