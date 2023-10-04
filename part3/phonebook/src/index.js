@@ -20,19 +20,16 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/info", async (req, res) => {
+app.get("/info", async (req, res, next) => {
   try {
     await DBConnect();
     const people = await Person.find();
     res.send(`
-    Phonebook has info for ${people.length} people <br />
+    Phone book has info for ${people.length} people <br />
     ${new Date()}
   `);
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
@@ -57,7 +54,7 @@ app.get("/api/people", async (req, res, next) => {
   }
 });
 
-app.get("/api/people/:id", async (req, res) => {
+app.get("/api/people/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     await DBConnect();
@@ -74,16 +71,13 @@ app.get("/api/people/:id", async (req, res) => {
         message: `The requested person: ${id} hasn't been found`,
       });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
 });
 
-app.delete("/api/people/:id", async (req, res) => {
+app.delete("/api/people/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
     await DBConnect();
@@ -100,16 +94,13 @@ app.delete("/api/people/:id", async (req, res) => {
         message: `The requested person ${id} hasn't been found`,
       });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
 });
 
-app.post("/api/people", async (req, res) => {
+app.post("/api/people", async (req, res, next) => {
   try {
     await DBConnect();
     const person = req.body;
@@ -133,16 +124,13 @@ app.post("/api/people", async (req, res) => {
       res.status(400).json({ success: false, message: "Missing data" });
     }
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
 });
 
-app.put("/api/people/:id", async (req, res) => {
+app.put("/api/people/:id", async (req, res, next) => {
   try {
     await DBConnect();
     const { id } = req.params;
@@ -150,6 +138,8 @@ app.put("/api/people/:id", async (req, res) => {
     if (newPerson.name && newPerson.number) {
       const person = await Person.findByIdAndUpdate(id, newPerson, {
         new: true,
+        runValidators: true,
+        context: "query",
       });
       if (person) {
         res.json({
@@ -167,10 +157,7 @@ app.put("/api/people/:id", async (req, res) => {
       res.status(400).json({ success: false, message: "Missing data" });
     }
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   } finally {
     mongoose.connection.close();
   }
@@ -183,8 +170,8 @@ const unknownEndPoint = (req, res) =>
   });
 
 const errorHandler = (error, req, res, next) => {
-  console.error("MyError: ", error.message);
-  res.json({
+  console.error("MyError: ", error);
+  res.status(500).json({
     success: false,
     message: error.message,
   });

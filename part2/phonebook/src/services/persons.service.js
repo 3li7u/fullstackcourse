@@ -5,8 +5,7 @@ const personsAPI = axios.create({
 
 const getAll = () => personsAPI.get("/").then((res) => res.data);
 
-const create = (persone) =>
-  personsAPI.post("/", persone).then((res) => res.data);
+const create = (person) => personsAPI.post("/", person).then((res) => res.data);
 
 const remove = (personID) =>
   personsAPI.delete(`/${personID}`).then((res) => res.data);

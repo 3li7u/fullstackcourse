@@ -15,7 +15,7 @@ export default function AddPerson({ persons, setPersons }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const existingPerson = persons.find(
-      (person) => person.name === newPerson.name
+      (person) => person?.name === newPerson.name
     );
     if (existingPerson) {
       if (
@@ -28,22 +28,23 @@ export default function AddPerson({ persons, setPersons }) {
           .then((data) => {
             setPersons((prev) =>
               prev.map((person) =>
-                person.id === existingPerson.id ? data.data : person
+                person?.id === existingPerson.id ? data.data : person
               )
             );
             setNewPerson({ name: "", number: "" });
             setNotification({
               message: data.message,
-              type: "success",
+              type: data.success ? "success" : "fail",
             });
             setTimeout(() => setNotification(null), 3000);
           })
           .catch((err) => {
+            console.log(err);
             setNotification({
               message: err.response?.data.message,
               type: "fail",
             });
-            setTimeout(() => setNotification(null), 3000);
+            setTimeout(() => setNotification(null), 5000);
           });
     } else {
       personesService
@@ -63,7 +64,7 @@ export default function AddPerson({ persons, setPersons }) {
             message: err.response?.data.message,
             type: "fail",
           });
-          setTimeout(() => setNotification(null), 3000);
+          setTimeout(() => setNotification(null), 5000);
         });
     }
   };
